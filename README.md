@@ -408,7 +408,7 @@ See [PRODUCT_DECISIONS.md](PRODUCT_DECISIONS.md) for architectural decisions, UX
 
 **Working Demo:**
 
-[Add Loom link here]
+(https://www.loom.com/share/6de8001b65d64513ae2d14ba9763b2ec)
 
 ---
 
