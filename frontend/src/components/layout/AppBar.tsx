@@ -6,36 +6,33 @@ import {
   IconButton,
   Box,
   Badge,
+  Tooltip,
 } from '@mui/material';
 import {
-  Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
+  Brightness4 as DarkModeIcon,
+  Brightness7 as LightModeIcon,
 } from '@mui/icons-material';
+import { useThemeMode } from '../../theme/ThemeProvider';
 
-interface AppBarProps {
-  onMenuClick?: () => void;
-}
+export const AppBar: React.FC = () => {
+  const { mode, toggleTheme } = useThemeMode();
 
-export const AppBar: React.FC<AppBarProps> = ({ onMenuClick }) => {
   return (
     <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={onMenuClick}
-          edge="start"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
-
         <Typography variant="h6" component="div" sx={{ flexGrow: 0, mr: 2 }}>
           TaskMaster
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
+
+        <Tooltip title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}>
+          <IconButton color="inherit" onClick={toggleTheme}>
+            {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+          </IconButton>
+        </Tooltip>
 
         <IconButton color="inherit">
           <Badge badgeContent={3} color="error">

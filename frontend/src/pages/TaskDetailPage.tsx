@@ -54,7 +54,6 @@ export const TaskDetailPage: React.FC<TaskDetailPageProps> = ({
   const handleDelete = () => {
     if (task) {
       onDeleteTask(task.id);
-      navigate('/tasks');
     }
   };
 

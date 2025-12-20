@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
-import { CssBaseline, Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { theme } from './theme';
+import { ThemeProvider } from './theme/ThemeProvider';
 import { MainLayout } from './components/layout';
 import { TaskForm } from './components/tasks';
 import { ConfirmDialog } from './components/common';
-import { Dashboard, TasksPage, TaskDetailPage } from './pages';
+import { Dashboard, TaskDetailPage } from './pages';
 import { Task, TaskFormData } from './types';
 import { useTasks } from './hooks';
 
@@ -89,6 +88,7 @@ const AppContent: React.FC = () => {
       try {
         await deleteTask(confirmDialog.taskId);
         showSnackbar('Task deleted successfully');
+        navigate('/')
       } catch (error) {
         showSnackbar('Failed to delete task', 'error');
       }
@@ -116,17 +116,6 @@ const AppContent: React.FC = () => {
             path="/"
             element={
               <Dashboard
-                onCreateTask={handleCreateTask}
-                onEditTask={handleEditTask}
-                onDeleteTask={handleDeleteTask}
-                onTaskClick={handleTaskClick}
-              />
-            }
-          />
-          <Route
-            path="/tasks"
-            element={
-              <TasksPage
                 onCreateTask={handleCreateTask}
                 onEditTask={handleEditTask}
                 onDeleteTask={handleDeleteTask}
@@ -188,8 +177,7 @@ const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <ThemeProvider>
         <Router>
           <AppContent />
         </Router>

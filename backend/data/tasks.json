@@ -4,19 +4,9 @@
     "title": "Test Task",
     "description": "Test",
     "priority": "high",
-    "status": "pending",
+    "status": "in-progress",
     "dueDate": "2025-12-30T00:00:00.000Z",
     "createdAt": "2025-12-20T08:53:05.632Z",
-    "updatedAt": "2025-12-20T08:53:05.632Z"
-  },
-  {
-    "id": "1766221335121",
-    "title": "My Day",
-    "description": "my day",
-    "priority": "medium",
-    "status": "pending",
-    "dueDate": "2025-12-22T00:00:00.000Z",
-    "createdAt": "2025-12-20T09:02:15.121Z",
-    "updatedAt": "2025-12-20T09:02:15.121Z"
+    "updatedAt": "2025-12-20T09:14:57.097Z"
   }
 ]

@@ -44,9 +44,23 @@ export class TasksController {
 
   @Get()
   @ApiOperation({ summary: 'Get all tasks with optional filters' })
-  @ApiQuery({ name: 'title', required: false, description: 'Search by task title' })
-  @ApiQuery({ name: 'status', required: false, enum: ['pending', 'in-progress', 'completed'], description: 'Filter by task status' })
-  @ApiQuery({ name: 'priority', required: false, enum: ['low', 'medium', 'high'], description: 'Filter by task priority' })
+  @ApiQuery({
+    name: 'title',
+    required: false,
+    description: 'Search by task title',
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    enum: ['pending', 'in-progress', 'completed'],
+    description: 'Filter by task status',
+  })
+  @ApiQuery({
+    name: 'priority',
+    required: false,
+    enum: ['low', 'medium', 'high'],
+    description: 'Filter by task priority',
+  })
   @ApiResponse({
     status: 200,
     description: 'Return all tasks matching the search criteria.',

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from "react";
 import {
   Box,
   Grid,
@@ -8,18 +8,18 @@ import {
   CardContent,
   Stack,
   Button,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Assignment as AssignmentIcon,
   PendingActions as PendingIcon,
   PlayArrow as InProgressIcon,
   CheckCircle as CompletedIcon,
   Add as AddIcon,
-} from '@mui/icons-material';
-import { useTasks } from '../hooks';
-import { TaskList } from '../components/tasks';
-import { Task } from '../types';
-import { TaskDto } from '../api/generated';
+} from "@mui/icons-material";
+import { useTasks } from "../hooks";
+import { TaskList, TaskFilters } from "../components/tasks";
+import { Task, TaskFilters as TaskFiltersType } from "../types";
+import { TaskDto } from "../api/generated";
 
 interface DashboardCardProps {
   title: string;
@@ -28,7 +28,12 @@ interface DashboardCardProps {
   color: string;
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ title, count, icon, color }) => (
+const DashboardCard: React.FC<DashboardCardProps> = ({
+  title,
+  count,
+  icon,
+  color,
+}) => (
   <Card>
     <CardContent>
       <Stack direction="row" alignItems="center" spacing={2}>
@@ -38,7 +43,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ title, count, icon, color
             color: color,
             borderRadius: 2,
             p: 1.5,
-            display: 'flex',
+            display: "flex",
           }}
         >
           {icon}
@@ -69,21 +74,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onDeleteTask,
   onTaskClick,
 }) => {
-  const { tasks, isLoading } = useTasks();
+  const [filters, setFilters] = useState<TaskFiltersType>({});
+  const { tasks, isLoading } = useTasks(filters);
 
   const stats = useMemo(() => {
     return {
       total: tasks.length,
       pending: tasks.filter((t) => t.status === TaskDto.status.PENDING).length,
-      inProgress: tasks.filter((t) => t.status === TaskDto.status.IN_PROGRESS).length,
-      completed: tasks.filter((t) => t.status === TaskDto.status.COMPLETED).length,
+      inProgress: tasks.filter((t) => t.status === TaskDto.status.IN_PROGRESS)
+        .length,
+      completed: tasks.filter((t) => t.status === TaskDto.status.COMPLETED)
+        .length,
     };
-  }, [tasks]);
-
-  const recentTasks = useMemo(() => {
-    return [...tasks]
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 6);
   }, [tasks]);
 
   return (
@@ -95,7 +97,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         mb={3}
       >
         <Typography variant="h4" fontWeight="bold">
-          Dashboard
+          Tasks
         </Typography>
         <Button
           variant="contained"
@@ -108,7 +110,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       </Stack>
 
       <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <DashboardCard
             title="Total Tasks"
             count={stats.total}
@@ -116,7 +118,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             color="#1976d2"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <DashboardCard
             title="Pending"
             count={stats.pending}
@@ -124,7 +126,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             color="#ed6c02"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <DashboardCard
             title="In Progress"
             count={stats.inProgress}
@@ -132,7 +134,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             color="#0288d1"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <DashboardCard
             title="Completed"
             count={stats.completed}
@@ -142,12 +144,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </Grid>
       </Grid>
 
+      <TaskFilters filters={filters} onFilterChange={setFilters} />
+
       <Paper sx={{ p: 3 }}>
-        <Typography variant="h5" fontWeight="bold" mb={3}>
-          Recent Tasks
-        </Typography>
         <TaskList
-          tasks={recentTasks}
+          tasks={tasks}
           loading={isLoading}
           onEditTask={onEditTask}
           onDeleteTask={onDeleteTask}
