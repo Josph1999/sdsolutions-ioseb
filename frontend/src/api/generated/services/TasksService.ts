@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CreateTaskDto } from '../models/CreateTaskDto';
+import type { ReorderTasksDto } from '../models/ReorderTasksDto';
 import type { TaskDto } from '../models/TaskDto';
 import type { UpdateTaskDto } from '../models/UpdateTaskDto';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -113,6 +114,26 @@ export class TasksService {
             },
             errors: {
                 404: `Task not found.`,
+            },
+        });
+    }
+    /**
+     * Reorder tasks
+     * @param requestBody
+     * @returns TaskDto Tasks have been successfully reordered.
+     * @throws ApiError
+     */
+    public static tasksControllerReorder(
+        requestBody: ReorderTasksDto,
+    ): CancelablePromise<Array<TaskDto>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/tasks/reorder',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: `Bad Request.`,
+                404: `One or more tasks not found.`,
             },
         });
     }

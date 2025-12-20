@@ -23,6 +23,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskDto } from './dto/task.dto';
 import { SearchTaskDto } from './dto/search-task.dto';
+import { ReorderTasksDto } from './dto/reorder-tasks.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -110,5 +111,19 @@ export class TasksController {
   remove(@Param('id') id: string) {
     this.tasksService.remove(id);
     return { message: 'Task deleted successfully' };
+  }
+
+  @Post('reorder')
+  @ApiOperation({ summary: 'Reorder tasks' })
+  @ApiBody({ type: ReorderTasksDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Tasks have been successfully reordered.',
+    type: [TaskDto],
+  })
+  @ApiResponse({ status: 404, description: 'One or more tasks not found.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  reorder(@Body() reorderTasksDto: ReorderTasksDto) {
+    return this.tasksService.reorder(reorderTasksDto.taskIds);
   }
 }

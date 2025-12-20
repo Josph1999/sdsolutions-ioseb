@@ -33,16 +33,6 @@ export const AppBar: React.FC = () => {
             {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
         </Tooltip>
-
-        <IconButton color="inherit">
-          <Badge badgeContent={3} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-
-        <IconButton color="inherit">
-          <AccountCircle />
-        </IconButton>
       </Toolbar>
     </MuiAppBar>
   );

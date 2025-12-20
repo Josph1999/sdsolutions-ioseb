@@ -7,6 +7,7 @@ export interface Task {
   priority: TaskPriority;
   status: TaskStatus;
   dueDate: string;
+  order: number;
   createdAt: string;
   updatedAt: string;
 }

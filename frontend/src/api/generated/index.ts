@@ -8,6 +8,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { CreateTaskDto } from './models/CreateTaskDto';
+export type { ReorderTasksDto } from './models/ReorderTasksDto';
 export { TaskDto } from './models/TaskDto';
 export { UpdateTaskDto } from './models/UpdateTaskDto';
 

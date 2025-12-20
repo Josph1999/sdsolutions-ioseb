@@ -28,6 +28,10 @@ export type TaskDto = {
      */
     dueDate: string;
     /**
+     * Order of the task for drag and drop sorting
+     */
+    order: number;
+    /**
      * Timestamp when the task was created
      */
     createdAt: string;

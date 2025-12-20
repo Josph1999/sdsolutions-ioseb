@@ -42,6 +42,12 @@ export class TaskDto {
   dueDate: string;
 
   @ApiProperty({
+    description: 'Order of the task for drag and drop sorting',
+    example: 0,
+  })
+  order: number;
+
+  @ApiProperty({
     description: 'Timestamp when the task was created',
     example: '2025-12-20T10:00:00.000Z',
   })

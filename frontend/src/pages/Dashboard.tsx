@@ -75,7 +75,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onTaskClick,
 }) => {
   const [filters, setFilters] = useState<TaskFiltersType>({});
-  const { tasks, isLoading } = useTasks(filters);
+  const { tasks, isLoading, reorderTasks } = useTasks(filters);
+
+  const handleReorderTasks = async (taskIds: string[]) => {
+    try {
+      await reorderTasks(taskIds);
+    } catch (error) {
+      console.error('Failed to reorder tasks:', error);
+    }
+  };
 
   const stats = useMemo(() => {
     return {
@@ -153,6 +161,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           onEditTask={onEditTask}
           onDeleteTask={onDeleteTask}
           onTaskClick={onTaskClick}
+          onReorderTasks={handleReorderTasks}
         />
       </Paper>
     </Box>

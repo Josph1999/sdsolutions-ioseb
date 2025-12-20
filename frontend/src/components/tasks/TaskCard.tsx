@@ -13,7 +13,10 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   AccessTime as TimeIcon,
+  DragIndicator as DragIcon,
 } from '@mui/icons-material';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Task } from '../../types';
 import {
   PRIORITY_LABELS,
@@ -38,6 +41,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDelete,
   onClick,
 }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id });
   const handleCardClick = () => {
     if (onClick) onClick(task);
   };
@@ -52,10 +63,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     if (onDelete) onDelete(task.id);
   };
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   const overdueStatus = isOverdue(task.dueDate) && task.status !== 'completed';
 
   return (
     <Card
+      ref={setNodeRef}
+      style={style}
       sx={{
         cursor: onClick ? 'pointer' : 'default',
         height: '100%',
@@ -70,7 +89,20 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       <CardContent sx={{ flexGrow: 1 }}>
         <Stack spacing={2}>
           <Box>
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography
+              variant="h6"
+              component="h2"
+              gutterBottom
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                wordBreak: 'break-word',
+                maxWidth: '100%',
+              }}
+            >
               {task.title}
             </Typography>
             <Typography
@@ -82,6 +114,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
+                wordBreak: 'break-word',
+                maxWidth: '100%',
               }}
             >
               {task.description}
@@ -116,23 +150,34 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </Stack>
       </CardContent>
 
-      <CardActions sx={{ justifyContent: 'flex-end', pt: 0 }}>
+      <CardActions sx={{ justifyContent: 'space-between', pt: 0 }}>
         <IconButton
+          {...attributes}
+          {...listeners}
           size="small"
-          color="primary"
-          onClick={handleEdit}
-          aria-label="edit task"
+          sx={{ cursor: 'grab' }}
+          aria-label="drag task"
         >
-          <EditIcon fontSize="small" />
+          <DragIcon fontSize="small" />
         </IconButton>
-        <IconButton
-          size="small"
-          color="error"
-          onClick={handleDelete}
-          aria-label="delete task"
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
+        <Box>
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={handleEdit}
+            aria-label="edit task"
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            color="error"
+            onClick={handleDelete}
+            aria-label="delete task"
+          >
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
       </CardActions>
     </Card>
   );

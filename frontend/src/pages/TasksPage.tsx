@@ -24,7 +24,20 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   onTaskClick,
 }) => {
   const [filters, setFilters] = useState<TaskFiltersType>({});
-  const { tasks, isLoading } = useTasks(filters);
+  const { tasks, isLoading, reorderTasks } = useTasks(filters);
+
+  const handleReorderTasks = async (taskIds: string[]) => {
+    if (!reorderTasks) {
+      return;
+    }
+
+    try {
+      const result = await reorderTasks(taskIds);
+      console.log('Reorder successful, result:', result);
+    } catch (error) {
+      console.error('Failed to reorder tasks:', error);
+    }
+  };
 
   return (
     <Box>
@@ -55,6 +68,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
         onEditTask={onEditTask}
         onDeleteTask={onDeleteTask}
         onTaskClick={onTaskClick}
+        onReorderTasks={handleReorderTasks}
       />
     </Box>
   );

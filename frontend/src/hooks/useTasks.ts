@@ -55,6 +55,18 @@ export const useTasks = (filters?: TaskFilters) => {
     },
   });
 
+  const reorderTasksMutation = useMutation({
+    mutationFn: (taskIds: string[]) => {
+      return TasksService.tasksControllerReorder({ taskIds });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: (error) => {
+      console.error('Reorder mutation failed:', error);
+    },
+  });
+
   return {
     tasks: tasksQuery.data || [],
     isLoading: tasksQuery.isLoading,
@@ -63,9 +75,11 @@ export const useTasks = (filters?: TaskFilters) => {
     createTask: createTaskMutation.mutateAsync,
     updateTask: updateTaskMutation.mutateAsync,
     deleteTask: deleteTaskMutation.mutateAsync,
+    reorderTasks: reorderTasksMutation.mutateAsync,
     isCreating: createTaskMutation.isPending,
     isUpdating: updateTaskMutation.isPending,
     isDeleting: deleteTaskMutation.isPending,
+    isReordering: reorderTasksMutation.isPending,
   };
 };
 
