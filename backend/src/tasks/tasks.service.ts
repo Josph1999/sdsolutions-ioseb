@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { TaskDto } from './dto/task.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SearchTaskDto } from './dto/search-task.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -55,8 +56,34 @@ export class TasksService {
     return newTask;
   }
 
-  findAll(): TaskDto[] {
-    return this.tasks;
+  findAll(searchTaskDto?: SearchTaskDto): TaskDto[] {
+    if (!searchTaskDto || Object.keys(searchTaskDto).length === 0) {
+      return this.tasks;
+    }
+
+    return this.tasks.filter((task) => {
+      // Filter by title (case-insensitive partial match)
+      if (searchTaskDto.title) {
+        const titleMatch = task.title
+          .toLowerCase()
+          .includes(searchTaskDto.title.toLowerCase());
+        if (!titleMatch) {
+          return false;
+        }
+      }
+
+      // Filter by status (exact match)
+      if (searchTaskDto.status && task.status !== searchTaskDto.status) {
+        return false;
+      }
+
+      // Filter by priority (exact match)
+      if (searchTaskDto.priority && task.priority !== searchTaskDto.priority) {
+        return false;
+      }
+
+      return true;
+    });
   }
 
   findOne(id: string): TaskDto {

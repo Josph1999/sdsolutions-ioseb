@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,11 +16,13 @@ import {
   ApiResponse,
   ApiParam,
   ApiBody,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskDto } from './dto/task.dto';
+import { SearchTaskDto } from './dto/search-task.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -40,14 +43,17 @@ export class TasksController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiOperation({ summary: 'Get all tasks with optional filters' })
+  @ApiQuery({ name: 'title', required: false, description: 'Search by task title' })
+  @ApiQuery({ name: 'status', required: false, enum: ['pending', 'in-progress', 'completed'], description: 'Filter by task status' })
+  @ApiQuery({ name: 'priority', required: false, enum: ['low', 'medium', 'high'], description: 'Filter by task priority' })
   @ApiResponse({
     status: 200,
-    description: 'Return all tasks.',
+    description: 'Return all tasks matching the search criteria.',
     type: [TaskDto],
   })
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@Query() searchTaskDto: SearchTaskDto) {
+    return this.tasksService.findAll(searchTaskDto);
   }
 
   @Get(':id')
