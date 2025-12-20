@@ -80,7 +80,7 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
   return createTheme({
     ...themeOptions,
     typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: '"Noto Sans", "Roboto", "Helvetica", "Arial", sans-serif',
       h1: {
         fontSize: '2.5rem',
         fontWeight: 500,
